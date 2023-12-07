@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="PurpleRock:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/PurpleRock_jar</output-path>
+    <root id="archive" name="PurpleRock.jar">
+      <element id="module-output" name="PurpleRock" />
+    </root>
+  </artifact>
+</component>
