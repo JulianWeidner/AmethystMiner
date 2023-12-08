@@ -39,6 +39,7 @@ public class AmethystMiner extends AbstractScript {
             case FULL -> bank();
             case WALKING_TO_AMETHYST ->  walkToAmethyst();
             case FINDING_AMETHYST -> finding_amethyst();
+            case MINING_AMETHYST -> mine_amethyst();
         }
 
         return 1000;
@@ -53,12 +54,13 @@ public class AmethystMiner extends AbstractScript {
         else if (!Inventory.isFull() && !Players.getLocal().isAnimating() && amethystArea.contains(Players.getLocal().getTile())){
             return State.FINDING_AMETHYST;
         }
+        else if (!Inventory.isFull() && Players.getLocal().isAnimating() && amethystArea.contains(Players.getLocal().getTile())){
+            return State.MINING_AMETHYST;
+        }
         else if (Inventory.isFull()) {
             return State.FULL;
         }
-        else if (!Inventory.isFull()){
-            return State.FINDING_AMETHYST;
-        }
+
 
         return state;
     }
@@ -75,9 +77,14 @@ public class AmethystMiner extends AbstractScript {
         if (!Players.getLocal().isAnimating() && !Players.getLocal().isMoving()){
             GameObject amethystRock = GameObjects.closest(11389,11388);
             if (amethystRock != null && amethystRock.interact("Mine")){
-                Sleep.sleepUntil(() -> Players.getLocal().isAnimating(), 7000);
+                Sleep.sleepUntil(() -> Players.getLocal().isAnimating(), 5000);
             }
         }
+    }
+
+    public void mine_amethyst(){
+
+
     }
     public boolean bank(){
         if (Bank.open(BankLocation.MINING_GUILD)){
