@@ -14,6 +14,13 @@ import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.wrappers.interactive.GameObject;
 import org.dreambot.api.utilities.Sleep;
+import org.dreambot.api.utilities.Timer;
+import java.awt.Graphics;
+
+import org.dreambot.api.methods.skills.Skill;
+import org.dreambot.api.utilities.Timer;
+import org.dreambot.api.wrappers.widgets.message.Message;
+
 
 
 
@@ -31,9 +38,18 @@ public class AmethystMiner extends AbstractScript {
     Area amethystArea = new Area(3016, 9707, 3030, 9698);
     State state;
 
+    int initMiningLevel = Skill.MINING.getLevel();
+    int initMiningExp = Skill.MINING.getExperience();
+
+    @Override
+    public void onStart(){
+        Logger.log("On start override");
+    }
 
     @Override
     public int onLoop() {
+
+
         switch (getState()){
             //case REQUIREMENTS_CHECK_FAIL -> LoggerSystem.exit(0);
             case FULL -> bank();
@@ -84,7 +100,6 @@ public class AmethystMiner extends AbstractScript {
 
     public void mine_amethyst(){
 
-
     }
     public boolean bank(){
         if (Bank.open(BankLocation.MINING_GUILD)){
@@ -128,6 +143,22 @@ public class AmethystMiner extends AbstractScript {
     public boolean inventory_pickaxe_check(int[] p_pickaxes){
         return Inventory.contains(p_pickaxes);
     }
+
+
+    @Override
+    public void onPaint(Graphics g) {
+        // Example drawing operations
+        g.drawString("SCRIPT", 5, 321);
+        g.drawString("Mining Level: " + initMiningLevel, 5, 331);
+        g.drawString("Run Time: " + rt.formatTime(), 5, 340);
+        // Add more drawing operations as needed
+    }
+
+    private Timer rt = new Timer();
+    private int mined = 0;
+
+
+
     public boolean bonusEquipmentCheck(){
         //Varrock armour
         //prospector
@@ -139,3 +170,4 @@ public class AmethystMiner extends AbstractScript {
     }
 
 }
+
