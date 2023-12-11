@@ -22,18 +22,17 @@ import org.dreambot.api.utilities.Timer;
 import org.dreambot.api.wrappers.widgets.message.Message;
 
 
-
-
-
 @ScriptManifest(name = "Amethyst Miner", description = "Mines that sweet sweet purple crack rock", author = "Julian",
-        version = 0.1, category = Category.MINING, image = "/a/5l3lARv")
+        version = 0.1, category = Category.MINING, image = "JCZEDTK.png")
 //https://imgur.com/a/5l3lARv
+//https://imgur.com/JCZEDTK
+//https://i.imgur.com/JCZEDTK.png
 
 
 public class AmethystMiner extends AbstractScript {
     //Script Variables
-    int[] pickaxes = {1275, 11920}; //rune, dragon
-    int[] inventoryItems = {21341, 1617, 1619, 1621, 1623, 21347}; //minerals, gems, amethyst
+    //int[] pickaxes = {1275, 11920}; //rune, dragon
+    //int[] inventoryItems = {21341, 1617, 1619, 1621, 1623, 21347}; //minerals, gems, amethyst
     Area amethystArea = new Area(3016, 9707, 3030, 9698);
     State state;
 
