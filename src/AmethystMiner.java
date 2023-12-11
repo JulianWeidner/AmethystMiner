@@ -26,83 +26,81 @@ import org.dreambot.api.wrappers.widgets.message.Message;
 
 
 @ScriptManifest(name = "Amethyst Miner", description = "Mines that sweet sweet purple crack rock", author = "Julian",
-        version = 0.1, category = Category.MINING, image = "https://imgur.com/a/5l3lARv")
+        version = 0.1, category = Category.MINING, image = "/a/5l3lARv")
 //https://imgur.com/a/5l3lARv
 
 
 public class AmethystMiner extends AbstractScript {
-    //Class Variables
+    //Script Variables
     int[] pickaxes = {1275, 11920}; //rune, dragon
     int[] inventoryItems = {21341, 1617, 1619, 1621, 1623, 21347}; //minerals, gems, amethyst
-
     Area amethystArea = new Area(3016, 9707, 3030, 9698);
     State state;
 
+    //Paint Vars
+    private Timer rt = new Timer();
     int initMiningLevel = Skill.MINING.getLevel();
     int initMiningExp = Skill.MINING.getExperience();
 
     @Override
-    public void onStart(){
+    public void onStart() {
         Logger.log("On start override");
     }
-
     @Override
     public int onLoop() {
 
-
-        switch (getState()){
+        switch (getState()) {
             //case REQUIREMENTS_CHECK_FAIL -> LoggerSystem.exit(0);
             case FULL -> bank();
-            case WALKING_TO_AMETHYST ->  walkToAmethyst();
+            case WALKING_TO_AMETHYST -> walkToAmethyst();
             case FINDING_AMETHYST -> finding_amethyst();
             case MINING_AMETHYST -> mine_amethyst();
         }
 
         return 1000;
     }
-
-
-
-    private State getState(){
-        if (!Inventory.isFull() && !amethystArea.contains(Players.getLocal().getTile())){
+    private State getState() {
+        if (!Inventory.isFull() && !amethystArea.contains(Players.getLocal().getTile())) {
             return State.WALKING_TO_AMETHYST;
-        }
-        else if (!Inventory.isFull() && !Players.getLocal().isAnimating() && amethystArea.contains(Players.getLocal().getTile())){
+        } else if (!Inventory.isFull() && !Players.getLocal().isAnimating() && amethystArea.contains(Players.getLocal().getTile())) {
             return State.FINDING_AMETHYST;
-        }
-        else if (!Inventory.isFull() && Players.getLocal().isAnimating() && amethystArea.contains(Players.getLocal().getTile())){
+        } else if (!Inventory.isFull() && Players.getLocal().isAnimating() && amethystArea.contains(Players.getLocal().getTile())) {
             return State.MINING_AMETHYST;
-        }
-        else if (Inventory.isFull()) {
+        } else if (Inventory.isFull()) {
             return State.FULL;
         }
 
 
         return state;
     }
+    @Override
+    public void onPaint(Graphics g) {
+        // Example drawing operations
+        g.drawString("SCRIPT", 5, 321);
+        g.drawString("Mining Level: " + initMiningLevel, 5, 331);
+        g.drawString("Run Time: " + rt.formatTime(), 5, 340);
+        // Add more drawing operations as needed
+    }
 
-
-
-    public void walkToAmethyst(){
-        if(!Players.getLocal().isMoving()) {
+//SCRIPT METHODS
+    public void walkToAmethyst() {
+        if (!Players.getLocal().isMoving()) {
             Walking.walk(amethystArea.getRandomTile());
         }
     }
-
-    public void finding_amethyst(){
-        if (!Players.getLocal().isAnimating() && !Players.getLocal().isMoving()){
-            GameObject amethystRock = GameObjects.closest(11389,11388);
-            if (amethystRock != null && amethystRock.interact("Mine")){
+    public void finding_amethyst() {
+        if (!Players.getLocal().isAnimating() && !Players.getLocal().isMoving()) {
+            GameObject amethystRock = GameObjects.closest(11389, 11388);
+            if (amethystRock != null && amethystRock.interact("Mine")) {
                 Sleep.sleepUntil(() -> Players.getLocal().isAnimating(), 5000);
             }
         }
     }
-
-    public void mine_amethyst(){
+    public void mine_amethyst() {
 
     }
-    public boolean bank(){
-        if (Bank.open(BankLocation.MINING_GUILD)){
+    public boolean bank() {
+        if (Bank.open(BankLocation.MINING_GUILD)) {
             Bank.depositAll(21341); //minerals
             Bank.depositAll(1617); // diamond
             Bank.depositAll(1623); // sapphire
@@ -113,59 +111,6 @@ public class AmethystMiner extends AbstractScript {
             return true;
             //21341, 1617, 1619, 1621, 1623, 21347
         }
-        return false;
-    }
-
-    public boolean requirementsCheck(){
-        //mining level check
-        if (mining_level_check(92)){
-            Logger.log("Mining Level Pass");
-        } else {
-            Logger.log("Mining Level Fail");
-            return false;
-        }
-        //pickaxe check pickaxes equipped, inventory
-        if (!equipped_pickaxe_check(pickaxes) || !inventory_pickaxe_check(pickaxes)){
-            Logger.log("Pickaxe Not Found");
-            return false;
-
-        }
-
-        return true;
-    }
-    public boolean mining_level_check(int requirement){
-        //get player skill level, return true or false on conditional based on the requirement param
-        return  Skills.getRealLevel(Skill.MINING) >= requirement;
-    }
-    public boolean equipped_pickaxe_check(int[] p_pickaxes){
-        return Equipment.contains(p_pickaxes);
-    }
-    public boolean inventory_pickaxe_check(int[] p_pickaxes){
-        return Inventory.contains(p_pickaxes);
-    }
-
-
-    @Override
-    public void onPaint(Graphics g) {
-        // Example drawing operations
-        g.drawString("SCRIPT", 5, 321);
-        g.drawString("Mining Level: " + initMiningLevel, 5, 331);
-        g.drawString("Run Time: " + rt.formatTime(), 5, 340);
-        // Add more drawing operations as needed
-    }
-
-    private Timer rt = new Timer();
-    private int mined = 0;
-
-
-
-    public boolean bonusEquipmentCheck(){
-        //Varrock armour
-        //prospector
-        //expert mining gloves
-        //signet
-        //charged glory
-        //mining cape
         return false;
     }
 
