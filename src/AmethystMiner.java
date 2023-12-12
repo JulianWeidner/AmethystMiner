@@ -41,6 +41,7 @@ public class AmethystMiner extends AbstractScript {
     int initMiningLevel = Skill.MINING.getLevel();
     int initMiningExp = Skill.MINING.getExperience();
 
+
     @Override
     public void onStart() {
         Logger.log("On start override");
@@ -75,9 +76,10 @@ public class AmethystMiner extends AbstractScript {
     @Override
     public void onPaint(Graphics g) {
         // Example drawing operations
-        g.drawString("SCRIPT", 5, 321);
-        g.drawString("Mining Level: " + initMiningLevel, 5, 331);
-        g.drawString("Run Time: " + rt.formatTime(), 5, 340);
+        g.drawString("Amethyst Miner v0.1", 5, 320);
+        g.drawString("Mining Level: " + initMiningLevel, 5, 335);
+        g.drawString("Run Time: " + rt.formatTime(), 5, 350);
+        g.drawString("Mining XP:" + initMiningExp,5, 365);
         // Add more drawing operations as needed
     }
 
