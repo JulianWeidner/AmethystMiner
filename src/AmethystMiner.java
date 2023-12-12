@@ -16,10 +16,11 @@ import org.dreambot.api.wrappers.interactive.GameObject;
 import org.dreambot.api.utilities.Sleep;
 import org.dreambot.api.utilities.Timer;
 import java.awt.Graphics;
-
+import org.dreambot.api.methods.skills.SkillTracker;
 import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.utilities.Timer;
 import org.dreambot.api.wrappers.widgets.message.Message;
+import org.dreambot.api.methods.grandexchange.LivePrices;
 
 
 @ScriptManifest(name = "Amethyst Miner", description = "Mines that sweet sweet purple crack rock", author = "Julian",
@@ -38,13 +39,18 @@ public class AmethystMiner extends AbstractScript {
 
     //Paint Vars
     private Timer rt = new Timer();
-    int initMiningLevel = Skill.MINING.getLevel();
-    int initMiningExp = Skill.MINING.getExperience();
+    private int amethystPrice = LivePrices.get(21347);
+
+
+
+
 
 
     @Override
     public void onStart() {
-        Logger.log("On start override");
+        SkillTracker.start();
+        SkillTracker.start(Skill.MINING);
+
     }
     @Override
     public int onLoop() {
@@ -75,11 +81,18 @@ public class AmethystMiner extends AbstractScript {
     }
     @Override
     public void onPaint(Graphics g) {
+        long xpTrack = SkillTracker.getGainedExperience(Skill.MINING);
+        long amtMined = xpTrack/240;
+        long estGold = amtMined * amethystPrice;
+
         // Example drawing operations
-        g.drawString("Amethyst Miner v0.1", 5, 320);
-        g.drawString("Mining Level: " + initMiningLevel, 5, 335);
-        g.drawString("Run Time: " + rt.formatTime(), 5, 350);
-        g.drawString("Mining XP:" + initMiningExp,5, 365);
+        g.drawString("Amethyst Miner v0.1", 5, 200);
+        //g.drawString("Mining Level: " + SkillTracker.getStartLevel(Skill.MINING), 5, 220);
+        g.drawString("Run Time: " + rt.formatTime(), 5, 240);
+        g.drawString("Mining XP:" + xpTrack,5, 260);
+        g.drawString("Ore: " + xpTrack/240, 5, 280);
+        g.drawString("Gold Earned: " + estGold,5, 300);
+        //g.drawString("State" + state, 5, 280);
         // Add more drawing operations as needed
     }
 
@@ -98,7 +111,7 @@ public class AmethystMiner extends AbstractScript {
         }
     }
     public void mine_amethyst() {
-
+        //you manage to mine some amethyst
     }
     public boolean bank() {
         if (Bank.open(BankLocation.MINING_GUILD)) {
