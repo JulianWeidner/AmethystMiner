@@ -3,13 +3,11 @@ import org.dreambot.api.methods.container.impl.bank.BankLocation;
 import org.dreambot.api.methods.interactive.GameObjects;
 import org.dreambot.api.methods.interactive.Players;
 import org.dreambot.api.methods.skills.Skill;
-import org.dreambot.api.methods.skills.Skills;
 import org.dreambot.api.methods.walking.impl.Walking;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
 import org.dreambot.api.utilities.Logger;
-import org.dreambot.api.methods.container.impl.equipment.Equipment;
 import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.wrappers.interactive.GameObject;
@@ -25,9 +23,6 @@ import org.dreambot.api.methods.grandexchange.LivePrices;
 
 @ScriptManifest(name = "Amethyst Miner", description = "Mines that sweet sweet purple crack rock", author = "Julian",
         version = 0.1, category = Category.MINING, image = "JCZEDTK.png")
-//https://imgur.com/a/5l3lARv
-//https://imgur.com/JCZEDTK
-//https://i.imgur.com/JCZEDTK.png
 
 
 public class AmethystMiner extends AbstractScript {
@@ -85,15 +80,12 @@ public class AmethystMiner extends AbstractScript {
         long amtMined = xpTrack/240;
         long estGold = amtMined * amethystPrice;
 
-        // Example drawing operations
-        g.drawString("Amethyst Miner v0.1", 5, 200);
-        //g.drawString("Mining Level: " + SkillTracker.getStartLevel(Skill.MINING), 5, 220);
-        g.drawString("Run Time: " + rt.formatTime(), 5, 240);
-        g.drawString("Mining XP:" + xpTrack,5, 260);
-        g.drawString("Ore: " + xpTrack/240, 5, 280);
-        g.drawString("Gold Earned: " + estGold,5, 300);
-        //g.drawString("State" + state, 5, 280);
-        // Add more drawing operations as needed
+        g.drawString("Amethyst Miner v0.1", 5, 250);
+
+        g.drawString("Run Time: " + rt.formatTime(), 5, 270);
+        g.drawString("Mining XP:" + xpTrack,5, 290);
+        g.drawString("Ore: " + xpTrack/240, 5, 310);
+        g.drawString("Gold Earned: " + estGold,5, 330);
     }
 
 //SCRIPT METHODS
