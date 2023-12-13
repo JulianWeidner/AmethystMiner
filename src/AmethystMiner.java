@@ -7,20 +7,15 @@ import org.dreambot.api.methods.walking.impl.Walking;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
-import org.dreambot.api.script.event.impl.MessageEvent;
-import org.dreambot.api.utilities.Logger;
 import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.map.Area;
 import org.dreambot.api.wrappers.interactive.GameObject;
 import org.dreambot.api.utilities.Sleep;
 import org.dreambot.api.utilities.Timer;
 import java.awt.Graphics;
+import org.dreambot.api.utilities.Logger;
 import org.dreambot.api.methods.skills.SkillTracker;
-import org.dreambot.api.methods.skills.Skill;
-import org.dreambot.api.utilities.Timer;
-import org.dreambot.api.wrappers.widgets.message.Message;
 import org.dreambot.api.methods.grandexchange.LivePrices;
-import org.dreambot.api.script.listener.ItemContainerListener;
 
 
 @ScriptManifest(name = "Amethyst Miner", description = "Mines that sweet sweet purple crack rock", author = "Julian",
@@ -33,6 +28,7 @@ public class AmethystMiner extends AbstractScript {
 
     //Paint Vars
     private Timer rt = new Timer();
+    private boolean xpPerOreSet = false;
     private int amethystPrice = LivePrices.get(21347);
 
 
@@ -42,9 +38,11 @@ public class AmethystMiner extends AbstractScript {
         SkillTracker.start(Skill.MINING);
 
     }
+
+
+
     @Override
     public int onLoop() {
-
         switch (getState()) {
             //case REQUIREMENTS_CHECK_FAIL -> LoggerSystem.exit(0);
             case FULL -> bank();
@@ -52,7 +50,6 @@ public class AmethystMiner extends AbstractScript {
             case FINDING_AMETHYST -> finding_amethyst();
             case MINING_AMETHYST -> mine_amethyst();
         }
-
         return 1000;
     }
     private State getState() {
@@ -65,21 +62,19 @@ public class AmethystMiner extends AbstractScript {
         } else if (Inventory.isFull()) {
             return State.FULL;
         }
-
-
         return state;
     }
     @Override
     public void onPaint(Graphics g) {
-        long xpTrack = SkillTracker.getGainedExperience(Skill.MINING);
-        long amtMined = xpTrack/240;
-        long estGold = amtMined * amethystPrice;
-
-        g.drawString("Amethyst Miner v0.1", 5, 250);
-
-        g.drawString("Run Time: " + rt.formatTime(), 5, 270);
-        g.drawString("Mining XP:" + xpTrack,5, 290);
-        g.drawString("Ore: " + xpTrack/240, 5, 310);
+        long xpTotal = SkillTracker.getGainedExperience(Skill.MINING);
+        long xpHour = SkillTracker.getGainedExperiencePerHour(Skill.MINING);
+        long oreMined = xpTotal/240;
+        long estGold = oreMined * amethystPrice;
+        g.drawString("Amethyst Miner v0.1", 5, 230);
+        g.drawString("Run Time: " + rt.formatTime(), 5, 250);
+        g.drawString("XP Hour: "+ xpHour, 5, 270);
+        g.drawString("Mining XP:" + xpTotal,5, 290);
+        g.drawString("Ore: " + oreMined, 5, 310);
         g.drawString("Gold Earned: " + estGold,5, 330);
     }
 
@@ -94,11 +89,12 @@ public class AmethystMiner extends AbstractScript {
             GameObject amethystRock = GameObjects.closest(11389, 11388);
             if (amethystRock != null && amethystRock.interact("Mine")) {
                 Sleep.sleepUntil(Inventory::isFull, Players.getLocal()::isAnimating, 2500, 100);
-                //Sleep.sleepUntil(() -> Inventory.isFull() && Players.getLocal().isAnimating(), 1200, 100);
+
             }
         }
     }
     public void mine_amethyst() {
+
         //you manage to mine some amethyst
     }
     public boolean bank() {
