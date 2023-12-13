@@ -7,6 +7,7 @@ import org.dreambot.api.methods.walking.impl.Walking;
 import org.dreambot.api.script.AbstractScript;
 import org.dreambot.api.script.Category;
 import org.dreambot.api.script.ScriptManifest;
+import org.dreambot.api.script.event.impl.MessageEvent;
 import org.dreambot.api.utilities.Logger;
 import org.dreambot.api.methods.container.impl.Inventory;
 import org.dreambot.api.methods.map.Area;
@@ -19,6 +20,7 @@ import org.dreambot.api.methods.skills.Skill;
 import org.dreambot.api.utilities.Timer;
 import org.dreambot.api.wrappers.widgets.message.Message;
 import org.dreambot.api.methods.grandexchange.LivePrices;
+import org.dreambot.api.script.listener.ItemContainerListener;
 
 
 @ScriptManifest(name = "Amethyst Miner", description = "Mines that sweet sweet purple crack rock", author = "Julian",
@@ -26,19 +28,12 @@ import org.dreambot.api.methods.grandexchange.LivePrices;
 
 
 public class AmethystMiner extends AbstractScript {
-    //Script Variables
-    //int[] pickaxes = {1275, 11920}; //rune, dragon
-    //int[] inventoryItems = {21341, 1617, 1619, 1621, 1623, 21347}; //minerals, gems, amethyst
     Area amethystArea = new Area(3016, 9707, 3030, 9698);
     State state;
 
     //Paint Vars
     private Timer rt = new Timer();
     private int amethystPrice = LivePrices.get(21347);
-
-
-
-
 
 
     @Override
@@ -98,7 +93,8 @@ public class AmethystMiner extends AbstractScript {
         if (!Players.getLocal().isAnimating() && !Players.getLocal().isMoving()) {
             GameObject amethystRock = GameObjects.closest(11389, 11388);
             if (amethystRock != null && amethystRock.interact("Mine")) {
-                Sleep.sleepUntil(() -> Players.getLocal().isAnimating(), 5000);
+                Sleep.sleepUntil(Inventory::isFull, Players.getLocal()::isAnimating, 2500, 100);
+                //Sleep.sleepUntil(() -> Inventory.isFull() && Players.getLocal().isAnimating(), 1200, 100);
             }
         }
     }
